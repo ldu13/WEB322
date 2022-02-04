@@ -7,7 +7,7 @@
 *
 *  Online (Heroku) URL: ___https://powerful-retreat-41504.herokuapp.com/________
 *
-*  GitHub Repository URL: ______________________________________________________
+*  GitHub Repository URL: __https://github.com/ldu13/web322-app_________________
 *
 ********************************************************************************/ 
 
