@@ -5,9 +5,9 @@
 * 
 *  Name: ___Lei Du____________ Student ID: __047587134___ Date: __Feb.18, 2022__
 *
-*  Online (Heroku) URL: ___________
+*  Online (Heroku) URL: ___https://powerful-retreat-41504.herokuapp.com/________
 *
-*  GitHub Repository URL: ___________________
+*  GitHub Repository URL: __https://github.com/ldu13/web322-app_________________
 *
 ********************************************************************************/ 
 
