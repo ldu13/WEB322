@@ -56,7 +56,7 @@ app.get("/blog", (req, res) => {
         res.json(data)
     }).catch((error) => {
         console.log(error)
-        res.status(404).send("ERROR!")
+        res.status(500).send("ERROR!")
     })
 });
 
@@ -91,7 +91,7 @@ app.get("/categories", (req, res) => {
         //res.send(data)
     }).catch((error) => {
         console.log(error)
-        res.status(404),send("ERROR!")
+        res.status(500),send("ERROR!")
     })
 })
 
