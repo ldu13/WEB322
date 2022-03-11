@@ -35,9 +35,9 @@ module.exports.getAllPosts = function() {
     })          
 }
 
-module.exports.getPublishedPosts = function() {
-    let publishedPosts = []
+module.exports.getPublishedPosts = function() {    
     return new Promise((resolve, reject) => {
+        let publishedPosts = []
         for(let i = 0; i < posts.length; i++) {
             if(posts[i].published == true) {
                 publishedPosts.push(posts[i])
@@ -61,24 +61,38 @@ module.exports.getCategories = function() {
     })
 }
 
-// p2-3 Adding an "addPost" function
+// a3 - Add the addPost() function
 module.exports.addPost = function (postData) {
     return new Promise((resolve, reject) => {
-        if (postData.published == undefined) {
+        let postData = ''
+        if (postData.published === undefined) {
             postData.published = false;
         } else {
             postData.published = true;
         }
         postData.id = posts.length + 1
+
+        var date = new Date();
+        var dd = date.getDate();
+        var mm = date.getMonth() + 1;
+        var yyyy = date.getFullYear();
+        if (dd < 10){
+            dd = '0' + dd;
+        }
+        if (mm < 12){
+            mm = '0' + mm;
+        }
+        postData.postDate = yyyy + '-' + mm + '-' + dd;
+
         posts.push(postData)       
         resolve()
     })
 }
 
-// p4-1 Add the getPostsByCategory(category) Function  
-module.exports.getPostsByCategory = function(category) {
-    let selectedPosts = []
-    return new Promise((resolve, reject) => {   
+// a3 - Add the getPostsByCategory(category) Function  
+module.exports.getPostsByCategory = function(category) {    
+    return new Promise((resolve, reject) => { 
+        let selectedPosts = []  
         for(let i = 0; i < posts.length; i++){
             if(posts[i].category == category){
                 selectedPosts.push(posts[i]);
@@ -92,10 +106,10 @@ module.exports.getPostsByCategory = function(category) {
     })
 }
 
-// p4-2 Add the getPostsByMinDate(minDateStr) Function  
-module.exports.getPostsByMinDate = function(minDateStr) {
-    let selectedPosts = []
+// a3 - Add the getPostsByMinDate(minDateStr) Function  
+module.exports.getPostsByMinDate = function(minDateStr) {   
     return new Promise((resolve, reject) => {
+        let selectedPosts = []
         posts.forEach(post => {
             if (new Date(post.postDate) >= new Date(minDateStr)) {
                 selectedPosts.push(post)
@@ -109,7 +123,7 @@ module.exports.getPostsByMinDate = function(minDateStr) {
     })
 }
 
-// p4-3 Add the getPostById(id) Function  
+// a3 - Add the getPostById(id) Function  
 module.exports.getPostById = function(newId) {
     return new Promise((resolve, reject) => {
         let selectedPosts = posts.filter(({id}) => id == newId);
@@ -118,5 +132,22 @@ module.exports.getPostById = function(newId) {
         } else {
             resolve(selectedPosts)
         }
+    })
+}
+
+// a4 - Add the getPublishedPostsByCategory(category) Function
+module.exports.getPublishedPostsByCategory = function(category) {  
+    return new Promise((resolve, reject) => {
+        let publishedPosts = []
+        for(let i = 0; i < posts.length; i++) {
+            if(posts[i].published == true && posts[i].category == category) {
+                publishedPosts.push(posts[i])
+            }
+        }
+        if(publishedPosts.length == 0) {
+            reject("no results returned")
+        } else {
+            resolve(publishedPosts)
+        }  
     })
 }

@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="col-md-12">
+
+        {{!-- allow show error message from the .catch() in route --}}
+        {{#unless categories}}
+        <div class="col-md-12 text-center">
+            <strong>{{message}}</strong>
+        </div>
+        {{/unless}}
+
+        <h2>Categories</h2>
+        <hr />
+
+        {{!-- build table with #each --}}
+        <div class="table-responsive">
+            <table class="table">
+                <thread>
+                    <tr>
+                        <th scope="col">Category ID</th>
+                        <th scope="col">Category Name</th>
+                    </tr>
+                </thread>               
+                <tbody>  
+                    {{#each categories}}                  
+                    <tr>
+                        <td>
+                            <a href="/posts?category={{id}}">{{id}}</a>
+                        </td>
+                        <td>
+                            <a href="/posts?category={{id}}">{{category}}</a>
+                        </td>
+                    </tr>  
+                    {{/each}}                 
+                </tbody>                             
+            </table>
+        </div>
+
+    </div>
+</div>
