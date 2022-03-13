@@ -30,6 +30,7 @@ module.exports.getAllPosts = function() {
         if(posts.length == 0) {
             reject("no results returned")
         } else {
+            console.log(posts)
             resolve(posts)
         }
     })          
@@ -64,12 +65,12 @@ module.exports.getCategories = function() {
 // a3 - Add the addPost() function
 module.exports.addPost = function (postData) {
     return new Promise((resolve, reject) => {
-        let postData = ''
-        if (postData.published === undefined) {
-            postData.published = false;
-        } else {
-            postData.published = true;
-        }
+        // if (postData.published == undefined) {
+        //     postData.published = false;
+        // } else {
+        //     postData.published = true;
+        // }
+        postData.published = postData.published ? true : false
         postData.id = posts.length + 1
 
         var date = new Date();
@@ -83,7 +84,7 @@ module.exports.addPost = function (postData) {
             mm = '0' + mm;
         }
         postData.postDate = yyyy + '-' + mm + '-' + dd;
-
+        
         posts.push(postData)       
         resolve()
     })

@@ -253,6 +253,7 @@ app.get("/posts/add", (req, res) => {
             layout: 'main'
         })
     })
+    
 })
 
 app.get("/post/:value", (req,res) => {
