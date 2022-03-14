@@ -247,13 +247,21 @@ app.get("/categories", (req, res) => {
 
 app.get("/posts/add", (req, res) => {
     //res.sendFile(path.join(__dirname, "/views/addPost.html"));
-    blogService.addPost().then((data) => {
-        res.render('addPost', {
-            data: data,
-            layout: 'main'
-        })
-    })
+
+    /*all need to do is res.render(), 
+    since there’s no data for get /about and no data for get /posts/add.
+    No data to pass, and layout is already defined in the app.engine config,
+    So don’t need to define the layout either, same as res.render("about").
+    The post undefined since it just doesn’t exist(passing empty data to the addPost function)
+    */
+    //blogService.addPost().then((data) => {
+    //     res.render('addPost', {
+    //         data: data,
+    //         layout: 'main'
+    //     })
+    // })
     
+    res.render('addPost')
 })
 
 app.get("/post/:value", (req,res) => {
