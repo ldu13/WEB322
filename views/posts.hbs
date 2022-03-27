@@ -1,43 +1,53 @@
 <div class="row">
     <div class="col-md-12">
 
-        {{!-- allow show error message from the .catch() in route --}}
-        {{!-- {{#unless posts}} --}}
-        <div class="col-md-12 text-center">
-            <strong>{{message}}</strong>
-        </div>
-        {{!-- {{/unless}} --}}
-
-        <h2>Posts</h2>
+        <h2>Posts
+            <a href="/posts/add" class="btn btn-success pull-right">Add Post</a>
+        </h2>
+            
         <hr />
 
         {{!-- build table with #each --}}
         <div class="table-responsive">
             <table class="table">
-                <thread>
+                <thead>
                     <tr>
-                        <th scope="col">Post ID</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Post Date</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Published</th>
+                        <th>Post&nbsp;ID</th>
+                        <th>Title</th>
+                        <th>Post&nbsp;Date</th>
+                        <th>Category</th>
+                        <th>Published</th>
+                        <th></th>
                     </tr>
-                </thread>               
+                </thead>
+                             
                 <tbody>
                     {{#each posts}}
                     <tr>
-                        <td>{{id}}</td>
+                        <td>{{postId}}</td>
                         <td>{{title}}</td>
-                        <td>{{postDate}}</td>
+                        <td>{{#formatDate postDate}}{{/formatDate}}</td>
+                        
                         <td>
-                            <a href="/posts?category={{category}}">{{category}}</a>
+                            <a href="/posts?category={{categoryId}}">{{categoryId}}</a>
                         </td>
                         <td>{{published}}</td>
+                        
+                        <td>
+                            <a href="/posts/delete/{{postId}}" class="btn btn-danger">remove</a>
+                        </td>
                     </tr>
                     {{/each}}
                 </tbody>               
             </table>
         </div>
+
+        {{!-- allow show error message from the .catch() in route --}}
+        {{#unless posts}}
+        <div class="col-md-12 text-center">
+            <strong>{{message}}</strong>
+        </div>
+        {{/unless}}
               
     </div>
 </div>

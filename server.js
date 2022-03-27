@@ -1,9 +1,9 @@
 /*********************************************************************************
-*  WEB322 – Assignment 04
+*  WEB322 – Assignment 05
 *  I declare that this assignment is my own work in accordance with Seneca  Academic Policy.  No part *  of this assignment has been copied manually or electronically from any other source 
 *  (including 3rd party web sites) or distributed to other students.
 * 
-*  Name: ___Lei Du____________ Student ID: __047587134___ Date: __Mar.11, 2022__
+*  Name: ___Lei Du____________ Student ID: __047587134___ Date: __Mar.25, 2022__
 *
 *  Online (Heroku) URL: ___https://powerful-retreat-41504.herokuapp.com/________
 *
@@ -24,7 +24,6 @@ const multer = require('multer');
 const cloudinary = require('cloudinary').v2
 const streamifier = require('streamifier')
 
-// a4
 const exphbs = require('express-handlebars');
 
 cloudinary.config({
@@ -44,7 +43,18 @@ const onHttpStart = () => {
     console.log("Express http server listening on " + HTTP_PORT);
 }
 
-// a4 - handlebars
+app.use(express.static('public')); 
+
+app.use(function(req,res,next) {
+    let route = req.path.substring(1);
+    app.locals.activeRoute = (route == "/") ? "/" : "/" + route.replace(/\/(.*)/, "");
+    app.locals.viewingCategory = req.query.category;
+    next();
+});
+
+// a5
+app.use(express.urlencoded({extended: true}));
+
 app.engine('.hbs', exphbs.engine({ 
     extname: '.hbs',
     defaultLayout: 'main',
@@ -65,45 +75,27 @@ app.engine('.hbs', exphbs.engine({
         },
         safeHTML: function(context){
             return stripJs(context);
-        }                     
+        },  
+        // a5
+        formatDate: function(dateObj){
+            let year = dateObj.getFullYear();
+            let month = (dateObj.getMonth() + 1).toString();
+            let day = dateObj.getDate().toString();
+            return `${year}-${month.padStart(2, '0')}-${day.padStart(2,'0')}`;
+        }      
     }
 }));
 app.set('view engine', '.hbs');
 
-app.use(express.static('public')); 
-
-// a4 - middleware function
-app.use(function(req,res,next){
-    let route = req.path.substring(1);
-    app.locals.activeRoute = (route == "/") ? "/" : "/" + route.replace(/\/(.*)/, "");
-    app.locals.viewingCategory = req.query.category;
-    next();
-});
-
+//////////////////////////////GET ROUTE//////////////////////////////
 app.get("/", (req, res) => {
     res.redirect("/blog");
 });
 
-// a4
 app.get("/about", (req, res) => {
-    //res.sendFile(path.join(__dirname, "/views/about.html"));
-    blogService.getAllPosts().then((data) => {
-        res.render('about', {
-            data: data,
-            layout: 'main'
-        })
-    })
+    res.render("about")
+    //res.render(path.join(__dirname, "/views/about.hbs"));
 });
-
-// a4 - replace the current app.get("/blog") route 
-// app.get("/blog", (req, res) => {
-//     blogService.getPublishedPosts().then((data) => {
-//         res.json(data)
-//     }).catch((error) => {
-//         console.log(error)
-//         res.status(500).send("ERROR!")
-//     })
-// });
 
 app.get('/blog', async (req, res) => {
 
@@ -152,7 +144,6 @@ app.get('/blog', async (req, res) => {
     res.render("blog", {data: viewData})
 });
 
-// a4 - add the blog/:id route
 app.get('/blog/:id', async (req, res) => {
 
     // Declare an object to store properties for the view
@@ -203,75 +194,100 @@ app.get('/blog/:id', async (req, res) => {
     res.render("blog", {data: viewData})
 });
 
-// a4
+
 app.get("/posts", (req, res) => {   
     if (req.query.category) {
         blogService.getPostsByCategory(req.query.category).then((data) => {
-            //res.json(data)
-            res.render("posts", {posts: data})
-        }).catch((error) => {
-            //res.json(error)
-            res.render("posts", {message: "no results"});
+            if (data.length > 0) {
+                res.render("posts", {posts: data})
+            } else {
+                res.render("posts", {message: "no results"});
+            }       
+        }).catch(() => {
+            res.render("posts", {message: "no results"});           
         })        
     }
     else if (req.query.minDate) {
         blogService.getPostsByMinDate(req.query.minDate).then((data) => {
-            //res.json(data)
-            res.render("posts", {posts: data})
-        }).catch((error) => {
-            //res.json(error)
-            res.render("posts", {message: "no results"});
+            if (data.length > 0) {
+                res.render("posts", {posts: data})
+            } else {
+                res.render("posts", {message: "no results"});
+            }           
+        }).catch(() => {
+            res.render("posts", {message: "no results"});           
         })
     }
     else {
         blogService.getAllPosts().then((data) => {
-            //res.json(data)
-            res.render("posts", {posts: data})
-        }).catch((error) => {
-            //res.json(error)
-            res.render("posts", {message: "no results"});
+            if (data.length > 0) {
+                res.render("posts", {posts: data})
+            } else {
+                res.render("posts", {message: "no results"});
+            }         
+        }).catch(() => {
+            res.render("posts", {message: "no results"});           
         })
     }
 })
 
-app.get("/categories", (req, res) => {
+app.get("/posts/add", (req, res) => {
     blogService.getCategories().then((data) => {
-        //res.json(data)
-        res.render("categories", {categories: data});
+        res.render("addPost", {categories: data});
     }).catch((error) => {
         console.log(error)
-        //res.status(500),send("ERROR!")
-        res.render("categories", {message: "no results"});
+        res.render("addPost", {categories: []}); 
     })
-})
-
-app.get("/posts/add", (req, res) => {
-    //res.sendFile(path.join(__dirname, "/views/addPost.html"));
-
-    /*all need to do is res.render(), 
-    since there’s no data for get /about and no data for get /posts/add.
-    No data to pass, and layout is already defined in the app.engine config,
-    So don’t need to define the layout either, same as res.render("about").
-    The post undefined since it just doesn’t exist(passing empty data to the addPost function)
-    */
-    //blogService.addPost().then((data) => {
-    //     res.render('addPost', {
-    //         data: data,
-    //         layout: 'main'
-    //     })
-    // })
-    
-    res.render('addPost')
 })
 
 app.get("/post/:value", (req,res) => {
     blogService.getPostById(req.params.value).then((data) => {
-        res.json(data)
+        //res.json(data)
+        res.render("posts", {posts: data})
     }).catch((error) => {
-        res.json(error)
+        //res.json(error)
+        res.render("posts", {message: "no results"});
     })
 })
 
+app.get('/posts/delete/:id', (req, res) => {
+    blogService.deletePostById(req.params.id).then(() => {
+        res.redirect("/posts")
+    }).catch((error) => {
+        console.log(error)
+        res.status(500).send("Unable to Remove Post / Post not found)")
+    })
+})
+
+
+app.get("/categories", (req, res) => {
+    blogService.getCategories().then((data) => {
+        if (data.length > 0) {
+            res.render("categories", {categories: data});
+        } else {
+            res.render("categories", {message: "no results"});
+        }        
+    }).catch((error) => {
+        console.log(error)
+        res.render("categories", {message: "no results"});        
+    })
+})
+
+app.get('/categories/add', (req, res) => {
+    res.render("addCategory")
+    //res.render(path.join(__dirname, "/views/addCategory.hbs"));
+})
+
+app.get('/categories/delete/:id', (req,res) => {
+    blogService.deleteCategoryById(req.params.id).then(() => {
+        res.redirect("/categories")
+    }).catch(() => {
+        res.status(500).send("Unable to Remove Category / Category not found")
+    })
+})
+
+
+//////////////////////////////POST ROUTE//////////////////////////////
 app.post("/posts/add", upload.single("featureImage"), (req, res) => {
     let streamUpload = (req) => {
         return new Promise((resolve, reject) => {
@@ -294,17 +310,30 @@ app.post("/posts/add", upload.single("featureImage"), (req, res) => {
         return result;
     }
      
-        upload(req).then((uploaded) => {
+    upload(req).then((uploaded) => {
         req.body.featureImage = uploaded.url;
         console.log(req.body)
         
-        blogService.addPost(req.body).then((data) => {
+        blogService.addPost(req.body).then(() => {
             res.redirect("/posts")
         }).catch((error) => {
-            res.status(500).send(error)
+            console.log(error)
+            res.status(500).send("Unable to Add Post")
         })  
     });  
 })
+
+app.post('/categories/add', (req, res) => {
+    blogService.addCategory(req.body).then(() => {
+        res.redirect("/categories")
+    }).catch((error) => {
+        console.log(error)
+        res.status(500).send("Unable to Add Category")
+    })  
+}) 
+
+
+
 
 app.use((req, res) => {
     res.status(404).send("PAGE NOT FOUND")
