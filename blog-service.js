@@ -13,11 +13,11 @@ var sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USER, proc
 
 // Define Post, Category, and their relationship
 var Post = sequelize.define('Post', {
-    postId:{
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true 
-    },
+    // postId:{
+    //     type: Sequelize.INTEGER,
+    //     primaryKey: true,
+    //     autoIncrement: true 
+    // },
     body: Sequelize.TEXT,
     title: Sequelize.STRING,
     postDate: Sequelize.DATE,
@@ -26,11 +26,11 @@ var Post = sequelize.define('Post', {
 })
 
 var Category = sequelize.define('Category', {
-    categoryId:{
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true 
-    },   
+    // categoryId:{
+    //     type: Sequelize.INTEGER,
+    //     primaryKey: true,
+    //     autoIncrement: true 
+    // },   
     category: Sequelize.STRING,
 })
 
@@ -110,7 +110,7 @@ module.exports.getPostById = function(id) {
     return new Promise((resolve, reject) => {
         Post.findAll({
             where: {
-                postId: id
+                id: id
             }
         }).then((data) => {
             console.log("Post Data by ID:")
@@ -221,7 +221,7 @@ module.exports.deleteCategoryById = function(id) {
     return new Promise((resolve, reject) => {
         Category.destroy({
             where: {
-                categoryId: id
+                id: id
             }
         }).then(() => {
             console.log("Category Deleted")
@@ -240,7 +240,7 @@ module.exports.deletePostById = function(id) {
     return new Promise((resolve, reject) => {
         Post.destroy({
             where: {
-                postId: id
+                id: id
             }
         }).then(() => {
             console.log("Post Deleted")
