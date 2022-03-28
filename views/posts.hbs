@@ -24,17 +24,17 @@
                 <tbody>
                     {{#each posts}}
                     <tr>
-                        <td>{{postId}}</td>
+                        <td>{{id}}</td>
                         <td>{{title}}</td>
                         <td>{{#formatDate postDate}}{{/formatDate}}</td>
                         
                         <td>
-                            <a href="/posts?category={{categoryId}}">{{categoryId}}</a>
+                            <a href="/posts?post={{category}}">{{category}}</a>
                         </td>
                         <td>{{published}}</td>
                         
                         <td>
-                            <a href="/posts/delete/{{postId}}" class="btn btn-danger">remove</a>
+                            <a href="/posts/delete/{{id}}" class="btn btn-danger">remove</a>
                         </td>
                     </tr>
                     {{/each}}
