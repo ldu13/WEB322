@@ -62,6 +62,13 @@ app.use(function(req, res, next) {
     next();
   });
 
+app.use(clientSessions( {
+    cookieName: "session",
+    secret: "web322",
+    duration: 2 * 60 * 1000,
+    activeDuration: 1000 * 60
+}));
+
 
 function ensureLogin(req, res, next) {
     if (!req.session.user) {
