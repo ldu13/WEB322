@@ -41,7 +41,7 @@ module.exports.registerUser = function (userData) {
     return new Promise(function (resolve, reject) {
         if (userData.password === userData.password2) {
             bcrypt.hash(userData.password, 10).then((hash) => {
-                userData.passowrd = hash;
+                userData.password = hash;
                 let newUser = new User(userData);
                 newUser.save((err) => {
                     if (err) {
@@ -70,25 +70,26 @@ module.exports.checkUser = function(userData) {
         User.findOne({userName: userData.userName})
         .exec()
         .then((mongoData) => {
-                           
-                    if (userData.password === mongoData.password) {           
-                        mongoData.loginHistory.push({dateTime: (new Date()).toString(), userAgent: userData.userAgent});
-                        
-                        User.updateOne(
-                            {userName: mongoData.userName},
-                            {$set: {loginHistory: mongoData.loginHistory}}
-                        )
-                        .exec()
-                        .then(() => {
-                            resolve(mongoData);
-                        }).catch((err) => {
-                            reject("There was an error verifying the user: " + err);
-                        })
-                    } else {
-                    reject("Incorrect Password for user: " + userData.userName); 
+            bcrypt.compare(userData.password, mongoData.password).then((res) => {
+                if (res === true) {           
+                    mongoData.loginHistory.push({dateTime: (new Date()).toString(), userAgent: userData.userAgent});
+                    
+                    User.updateOne(
+                        {userName: mongoData.userName},
+                        {$set: {loginHistory: mongoData.loginHistory}}
+                    )
+                    .exec()
+                    .then(() => {
+                        resolve(mongoData);
+                    }).catch((err) => {
+                        reject("There was an error verifying the user: " + err);
+                    })
+                } else {
+                reject("Incorrect Password for user: " + userData.userName); 
                 }   
+            })
         }).catch(() => {
             reject("Unable to find user: " + userData.userName);
         })
-    })    
+    })
 }
