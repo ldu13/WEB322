@@ -9,14 +9,17 @@
             {{#safeHTML data.post.body}}{{/safeHTML}}
             <br /><br />
             <strong>Category:</strong> {{data.post.category}}<br />
-            <strong>Last Updated:</strong> {{data.post.postDate}}
+            {{!-- <strong>Last Updated:</strong> {{data.post.postDate}} --}}
+            <strong>Last Updated:</strong> {{#formatDate data.post.postDate}}{{/formatDate}}
+        </article>
+
         {{else}}
         <div class="col-md-12 text-center">
             <h2>{{data.message}}</h2>
             {{!-- <h2></h2> --}}
             <p>Please try another Post / Category</p>
         </div>
-        </article>       
+               
         {{/if}}
 
     </section>
@@ -28,7 +31,7 @@
         <h4>Posts</h4>        
         <ul class="list-group">  
             {{#each data.posts}}         
-            <a href="/blog/{{id}}?category={{../viewingCategory}}" class="list-group-item">{{title}}</a>     
+                <a href="/blog/{{id}}?category={{../viewingCategory}}" class="list-group-item">{{title}}</a>     
             {{/each}}      
         </ul>
         {{/if}}

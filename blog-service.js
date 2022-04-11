@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize');
+const Sequelize = require("sequelize");
 
 var sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USER, process.env.DB_PASSWORD, {
     host: process.env.DB_HOST,
@@ -42,8 +42,8 @@ module.exports.initialize = function() {
     return new Promise((resolve, reject) => {
         sequelize.sync().then(() => {
             resolve("Connection has been established successfully")
-        }).catch((error) => {
-            console.log(error)
+        }).catch((err) => {
+            console.log(err)
             reject("unable to sync the database")
         })
     });
@@ -56,8 +56,8 @@ module.exports.getAllPosts = function() {
     return new Promise((resolve, reject) => {
         Post.findAll().then((data) => {
             resolve(data)
-        }).catch((error) => {
-            console.log(error)
+        }).catch((err) => {
+            console.log(err)
             reject("no results returned")
         })
     });      
@@ -75,8 +75,8 @@ module.exports.getPostsByCategory = function(category) {
             console.log("Post Data by Category:")
             console.log(data)
             resolve(data)
-        }).catch((error) => {
-            console.log(error)
+        }).catch((err) => {
+            console.log(err)
             reject("no results returned")            
         })
     });
@@ -97,8 +97,8 @@ module.exports.getPostsByMinDate = function(minDateStr) {
             console.log("Post Data by MinDate:")
             console.log(data)
             resolve(data)
-        }).catch((error) => {
-            console.log(error)
+        }).catch((err) => {
+            console.log(err)
             reject("no results returned")
         })
     });
@@ -116,8 +116,8 @@ module.exports.getPostById = function(id) {
             console.log("Post Data by ID:")
             console.log(data)
             resolve(data[0])
-        }).catch((error) => {
-            console.log(error)
+        }).catch((err) => {
+            console.log(err)
             reject("no results returned")            
         })
     });
@@ -138,9 +138,9 @@ module.exports.addPost = function (postData) {
         Post.create(postData).then(() => {
             console.log("Post Created")
             resolve()
-        }).catch((error) => {
+        }).catch((err) => {
             console.log("Post Error:")
-            console.log(error)
+            console.log(err)
             reject("unable to create post")
         })
     });
@@ -156,8 +156,8 @@ module.exports.getPublishedPosts = function() {
             }
         }).then((data) => {
             resolve(data)
-        }).catch((error) => {
-            console.log(error)
+        }).catch((err) => {
+            console.log(err)
             reject("no results returned")
         })
     });                    
@@ -174,8 +174,8 @@ module.exports.getPublishedPostsByCategory = function(category) {
             }
         }).then((data) => {
             resolve(data)
-        }).catch((error) => {
-            console.log(error)
+        }).catch((err) => {
+            console.log(err)
             reject("no results returned")
         })
     });
@@ -187,8 +187,8 @@ module.exports.getCategories = function() {
     return new Promise((resolve, reject) => {
         Category.findAll().then((data) => {
             resolve(data)
-        }).catch((error) => {
-            console.log(error)
+        }).catch((err) => {
+            console.log(err)
             reject("no results returned")
         })
     });
@@ -207,9 +207,9 @@ module.exports.addCategory = function(categoryData) {
         Category.create(categoryData).then(() => {
             console.log("Category Created")
             resolve()
-        }).catch((error) => {
+        }).catch((err) => {
             console.log("Category Error:")
-            console.log(error)
+            console.log(err)
             reject("unable to create category")
         })
     })
@@ -226,10 +226,10 @@ module.exports.deleteCategoryById = function(id) {
         }).then(() => {
             console.log("Category Deleted")
             resolve()
-        }).catch((error) => {
+        }).catch((err) => {
             console.log("Category Delete Error:")
-            console.log(error)
-            reject()
+            console.log(err)
+            reject("unable to delete category")
         })
     })
 }
@@ -245,10 +245,10 @@ module.exports.deletePostById = function(id) {
         }).then(() => {
             console.log("Post Deleted")
             resolve()
-        }).catch((error) => {
+        }).catch((err) => {
             console.log("Post Delete Error:")
-            console.log(error)
-            reject()
+            console.log(err)
+            reject("unable to delete post")
         })
     })
 }
