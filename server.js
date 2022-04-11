@@ -248,41 +248,6 @@ app.get("/posts", ensureLogin, (req, res) => {
     }
 })
 
-// app.get("/posts", ensureLogin,(req, res) => {
-//     let category = req.query.category;
-//     let minDate = req.query.minDate;
-
-//     if (category) {
-//         blogService.getPostsByCategory(category).then(data => {
-//             if (data.length > 0) {
-//                 res.render("posts", { posts: data });
-//             }
-//             else {
-//                 res.render("posts", { message: "no results" });
-//             }
-//         })
-//     }
-//     else if (minDate != "" && minDate != null) {
-//         blogService.getPostsByMinDate(minDate).then(data => {
-//             if (data.length > 0) {
-//                 res.render("posts", { posts: data });
-//             }
-//             else {
-//                 res.render("posts", { message: "no results" });
-//             }
-//         })
-//     }
-//     else {
-//         blogService.getAllPosts().then(data => {
-//             if (data.length > 0) {
-//                 res.render("posts", { posts: data });
-//             }
-//             else {
-//                 res.render("posts", { message: "no results" });
-//             }
-//         })
-//     }
-// });
 
 app.get("/posts/add", ensureLogin, (req, res) => {
     blogService.getCategories().then((data) => {
