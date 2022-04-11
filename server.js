@@ -57,18 +57,18 @@ app.use(function(req, res, next) {
 
 app.use(express.urlencoded({extended: true}));
 
-app.use(function(req, res, next) {
-    res.locals.session = req.session;
-    next();
-  });
-
+// should before app.use res.locals.session
 app.use(clientSessions( {
     cookieName: "session",
-    secret: "web322",
+    secret: "web322_assignment6_mongoDB",
     duration: 2 * 60 * 1000,
     activeDuration: 1000 * 60
 }));
 
+app.use(function(req, res, next) {
+    res.locals.session = req.session;
+    next();
+  });
 
 function ensureLogin(req, res, next) {
     if (!req.session.user) {
@@ -381,7 +381,7 @@ app.post("/register", (req, res) => {
     })
 })
 
-
+// notice mongoData
 app.post("/login", (req,res) => {
     req.body.userAgent = req.get('User-Agent')
     authData.checkUser(req.body).then((mongoData) => {

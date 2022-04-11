@@ -65,6 +65,9 @@ module.exports.registerUser = function (userData) {
 }
 
 // checkUser(userData)
+// use findOne and mongoData, or find and mongoData[0]
+// because find returns an array, and
+// there can only be one matching username, then mongoData[0] is just the first or only element in the array
 module.exports.checkUser = function(userData) {
     return new Promise(function (resolve, reject) {
         User.findOne({userName: userData.userName})
