@@ -1,16 +1,3 @@
-/*********************************************************************************
-*  WEB322 – Assignment 06
-*  I declare that this assignment is my own work in accordance with Seneca  Academic Policy.  No part *  of this assignment has been copied manually or electronically from any other source 
-*  (including 3rd party web sites) or distributed to other students.
-* 
-*  Name: ___Lei Du____________ Student ID: __047587134___ Date: __Apr. 8, 2022__
-*
-*  Online (Heroku) URL: ___https://powerful-retreat-41504.herokuapp.com/________
-*
-*  GitHub Repository URL: __https://github.com/ldu13/web322-app_________________
-*
-********************************************************************************/ 
-
 const express = require("express");
 const app = express();
 const env = require("dotenv");
